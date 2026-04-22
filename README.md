@@ -118,6 +118,7 @@ git clone https://github.com/your-username/ocean-noise-pollution-analyzer.git
 2. Install dependencies:
 
 ```
+
 pip install -r requirements.txt
 ```
 
