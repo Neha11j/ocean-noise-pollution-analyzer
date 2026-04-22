@@ -1,0 +1,4 @@
+Model,Accuracy,Precision,Recall,F1 Score,AUC,PR,Branch,Author,Note
+SVM,0.78,0.7806,0.78,0.7803,0.8496,baseline,main,sneha,Initial baseline
+Random Forest,0.770833,0.7605,0.770833,0.76485,,baseline,main,sneha,Initial baseline
+Logistic Regression,0.76,0.7739,0.76,0.765932,,baseline,main,sneha,Initial baseline
