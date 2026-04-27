@@ -4,3 +4,4 @@ matplotlib
 scikit-learn
 SVM 
 Logistic Decision
+Decision Tree
