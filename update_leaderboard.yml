@@ -1,0 +1,49 @@
+name: Update Leaderboard
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  evaluate-and-update:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run evaluation and update leaderboard
+        env:
+          PR_NUMBER: ${{ github.event.pull_request.number }}
+          PR_BRANCH: ${{ github.event.pull_request.head.ref }}
+          PR_AUTHOR: ${{ github.event.pull_request.user.login }}
+          PR_TITLE: ${{ github.event.pull_request.title }}
+        run: |
+          python scripts/evaluate_and_log.py \
+            --pr "PR-$PR_NUMBER" \
+            --branch "$PR_BRANCH" \
+            --author "$PR_AUTHOR" \
+            --note "$PR_TITLE" \
+            --leaderboard leaderboard.csv
+
+      - name: Commit updated leaderboard
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add leaderboard.csv
+          git diff --cached --quiet || git commit -m "chore: update leaderboard after PR-${{ github.event.pull_request.number }}"
+          git push
